@@ -1,0 +1,23 @@
+.player-profile {
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+
+.player-profile img {
+  border-radius: 10px;
+  margin-bottom: 20px;
+  max-width: 200px;
+}
+
+.player-profile h2 {
+  margin-bottom: 10px;
+  color: #1976d2;
+}
+
+.player-profile p {
+  margin: 6px 0;
+  font-size: 16px;
+}
