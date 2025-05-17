@@ -1,12 +1,27 @@
-# React + Vite
+Mavericks Draft Hub
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to the Mavericks Draft Hub! This web application provides a centralized analysis platform (with player profiles, statistic filets, and an AI chatbot) fir the Dallas Mavericks front office (I'll pretend that they'll draft Flagg because of this). 
 
-Currently, two official plugins are available:
+1. Features
+- Interactive Big Board with real-time sorting and filtering
+- Player Profiles with detailed stats and custom scouting reports
+- Integrated AI Chatbot for draft-related Q&A
+- Clean, responsive UI optimized for laptops, tablets, and phones
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+2. Overall Structure 
+- Built with React and Vite
+- Data-driven: All player data is loaded from a JSON file
+- Uses Material UI for clean, modern components
+- Live player rankings and customizable scouting reports
 
-## Expanding the ESLint configuration
+3. How to Use
+- Clone the repository: git clone https://github.com/your-github-username/mavs-draft-hub.git
+- Install dependencies: npm install
+- Set up your OpenAI API key (required for the AI Chatbot): Create a .env file in the root of the project. Add your OpenAI API key: VITE_OPENAI_API_KEY=your-api-key-here
+- Run the development server: npm run dev
+- Access the app at http://localhost:5173.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+4. Deployment
+- Easily deployable to any site hosting service, such as Netlify, Vercel, or GitHub Pages.
+
+5. Forewarning: The AI Chatbot is only accurate up to September 2021 due to OpenAI’s model limitations.
