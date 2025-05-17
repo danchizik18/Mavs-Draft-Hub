@@ -1,23 +1,73 @@
-.player-profile {
+.player-profile-container {
+  max-width: 800px;
+  width: 90%;
+  margin: auto;
   padding: 20px;
-  background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  margin-top: 20px;
+  text-align: center;
 }
 
-.player-profile img {
-  border-radius: 10px;
+.profile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
   margin-bottom: 20px;
-  max-width: 200px;
 }
 
-.player-profile h2 {
+.profile-avatar {
+  width: 150px;
+  height: 150px;
   margin-bottom: 10px;
-  color: #1976d2;
 }
 
-.player-profile p {
-  margin: 6px 0;
-  font-size: 16px;
+.player-name {
+  font-size: 2rem;
+}
+
+.back-button {
+  margin-top: 10px;
+}
+
+.scouting-reports {
+  padding: 15px;
+  margin-bottom: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  text-align: left;
+}
+
+.scouting-reports h5 {
+  text-align: left;
+}
+
+.report-item {
+  font-size: 1rem;
+  margin-bottom: 5px;
+  word-wrap: break-word;
+}
+
+.add-report-button {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .player-profile-container {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .profile-avatar {
+    width: 120px;
+    height: 120px;
+  }
+
+  .player-name {
+    font-size: 1.5rem;
+  }
+
+  .add-report-button {
+    font-size: 1rem;
+    padding: 10px;
+  }
 }
