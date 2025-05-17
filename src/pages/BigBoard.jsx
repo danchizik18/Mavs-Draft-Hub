@@ -95,49 +95,66 @@ const BigBoard = () => {
   };
 
   const toggleSort = (key) => {
-    const direction = sortConfig.key === key && sortConfig.direction === "asc" ? "desc" : "asc";
-    setSortConfig({ key, direction });
+  const direction = sortConfig.key === key && sortConfig.direction === "asc" ? "desc" : "asc";
+  setSortConfig({ key, direction });
 
-    const sorted = [...displayedPlayers].sort((a, b) => {
-      const valueA = key === "height" ? parseHeight(a.height) : parseSortableValue(a[key]);
-      const valueB = key === "height" ? parseHeight(b.height) : parseSortableValue(b[key]);
+  const sorted = [...displayedPlayers].sort((a, b) => {
+    const valueA = key === "height" ? parseHeight(a.height) 
+                 : key === "Average Rank" ? calculateAverage(a)
+                 : parseSortableValue(a[key]);
 
-      if (valueA === "N/A") return 1;
-      if (valueB === "N/A") return -1;
-      return direction === "asc" ? valueA - valueB : valueB - valueA;
-    });
+    const valueB = key === "height" ? parseHeight(b.height) 
+                 : key === "Average Rank" ? calculateAverage(b)
+                 : parseSortableValue(b[key]);
 
-    setDisplayedPlayers(sorted);
-  };
+    if (valueA === "N/A" || isNaN(valueA) || valueA === Infinity) return 1;
+    if (valueB === "N/A" || isNaN(valueB) || valueB === Infinity) return -1;
+
+    if (direction === "asc") {
+      return valueA - valueB;
+    } else {
+      return valueB - valueA;
+    }
+  });
+
+  setDisplayedPlayers(sorted);
+};
+
+const calculateAverage = (player) => {
+  const scoutRanks = ["Sam Vecenie Rank", "Kevin O'Connor Rank", "Kyle Boone Rank", "Gary Parrish Rank"];
+  const validValues = scoutRanks
+    .map(rank => parseFloat(player[rank]))
+    .filter(val => !isNaN(val));
+    
+  return validValues.length > 0
+    ? (validValues.reduce((a, b) => a + b, 0) / validValues.length).toFixed(2)
+    : "N/A";
+};
+
+const parseSortableValue = (value) => {
+  if (value === "N/A" || value === "" || value === undefined) return Infinity;
+  const parsedValue = parseFloat(value);
+  return isNaN(parsedValue) ? Infinity : parsedValue;
+};
+
+const parseHeight = (height) => {
+  if (!height || height === "N/A") return Infinity;
+  const match = height.match(/(\d+)\s*ft\s*(\d+)?\s*in/);
+  if (!match) return Infinity;
+  const feet = parseInt(match[1]);
+  const inches = match[2] ? parseInt(match[2]) : 0;
+  return feet * 12 + inches;
+};
+
+
+
+
 
   const getSortIcon = (key) => {
     if (sortConfig.key === key) {
       return sortConfig.direction === "asc" ? <ArrowUpwardIcon /> : <ArrowDownwardIcon />;
     }
     return null;
-  };
-
-  const parseSortableValue = (value) => {
-    if (value === "N/A" || value === "" || value === undefined) return Infinity;
-    return parseFloat(value) || Infinity;
-  };
-
-  const parseHeight = (height) => {
-    if (!height) return Infinity;
-    const match = height.match(/(\d+)\s*ft\s*(\d+)?\s*in/);
-    if (!match) return Infinity;
-    const feet = parseInt(match[1]);
-    const inches = match[2] ? parseInt(match[2]) : 0;
-    return feet * 12 + inches;
-  };
-
-  const calculateAverage = (player) => {
-    const validValues = scoutRanks
-      .map(rank => parseFloat(player[rank]))
-      .filter(val => !isNaN(val));
-    return validValues.length > 0
-      ? (validValues.reduce((a, b) => a + b, 0) / validValues.length).toFixed(2)
-      : "N/A";
   };
 
   const navigateToProfile = (player) => {
