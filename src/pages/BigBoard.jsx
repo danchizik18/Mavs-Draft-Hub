@@ -18,7 +18,6 @@ import {
   FormControl,
   InputLabel,
   Alert,
-  TableSortLabel,
 } from "@mui/material";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
@@ -35,6 +34,7 @@ const BigBoard = () => {
   const [sortConfig, setSortConfig] = useState({ key: "name", direction: "asc" });
 
   const navigate = useNavigate();
+  const scoutRanks = ["Sam Vecenie Rank", "Kevin O'Connor Rank", "Kyle Boone Rank", "Gary Parrish Rank"];
 
   useEffect(() => {
     loadPlayers();
@@ -75,7 +75,7 @@ const BigBoard = () => {
 
     if (filter) {
       filtered = filtered.filter(player => {
-        const value = parseFloat(player[filter]);
+        const value = filter === "height" ? parseHeight(player.height) : parseFloat(player[filter]);
         if (isNaN(value)) return true;
         if (minValue && value < parseFloat(minValue)) return false;
         if (maxValue && value > parseFloat(maxValue)) return false;
@@ -99,8 +99,11 @@ const BigBoard = () => {
     setSortConfig({ key, direction });
 
     const sorted = [...displayedPlayers].sort((a, b) => {
-      const valueA = parseFloat(a[key]) || 0;
-      const valueB = parseFloat(b[key]) || 0;
+      const valueA = key === "height" ? parseHeight(a.height) : parseSortableValue(a[key]);
+      const valueB = key === "height" ? parseHeight(b.height) : parseSortableValue(b[key]);
+
+      if (valueA === "N/A") return 1;
+      if (valueB === "N/A") return -1;
       return direction === "asc" ? valueA - valueB : valueB - valueA;
     });
 
@@ -114,19 +117,37 @@ const BigBoard = () => {
     return null;
   };
 
+  const parseSortableValue = (value) => {
+    if (value === "N/A" || value === "" || value === undefined) return Infinity;
+    return parseFloat(value) || Infinity;
+  };
+
+  const parseHeight = (height) => {
+    if (!height) return Infinity;
+    const match = height.match(/(\d+)\s*ft\s*(\d+)?\s*in/);
+    if (!match) return Infinity;
+    const feet = parseInt(match[1]);
+    const inches = match[2] ? parseInt(match[2]) : 0;
+    return feet * 12 + inches;
+  };
+
+  const calculateAverage = (player) => {
+    const validValues = scoutRanks
+      .map(rank => parseFloat(player[rank]))
+      .filter(val => !isNaN(val));
+    return validValues.length > 0
+      ? (validValues.reduce((a, b) => a + b, 0) / validValues.length).toFixed(2)
+      : "N/A";
+  };
+
   const navigateToProfile = (player) => {
     navigate(`/player/${player.name}`);
   };
 
   return (
     <div className="big-board-container">
-      <div className="header-controls">
-        <Typography variant="h4" gutterBottom>Mavericks Draft Hub - Big Board</Typography>
-        <Button variant="outlined" onClick={() => navigate("/")}>Back to Home</Button>
-      </div>
-
-      {error && <Alert severity="error">{error}</Alert>}
-
+      <Typography variant="h4" gutterBottom>Mavericks Draft Hub - Big Board</Typography>
+      
       <TextField
         label="Search Players"
         variant="outlined"
@@ -160,10 +181,12 @@ const BigBoard = () => {
               <TableCell>Photo</TableCell>
               <TableCell onClick={() => toggleSort("name")}>Name {getSortIcon("name")}</TableCell>
               <TableCell>Team</TableCell>
-              <TableCell onClick={() => toggleSort("ESPN Rank")}>ESPN Rank {getSortIcon("ESPN Rank")}</TableCell>
               <TableCell onClick={() => toggleSort("height")}>Height {getSortIcon("height")}</TableCell>
               <TableCell onClick={() => toggleSort("weight (lbs)")}>Weight (lbs) {getSortIcon("weight (lbs)")}</TableCell>
-              <TableCell onClick={() => toggleSort("agility (s)")}>Agility (s) {getSortIcon("agility (s)")}</TableCell>
+              {scoutRanks.map(rank => (
+                <TableCell key={rank} onClick={() => toggleSort(rank)}>{rank} {getSortIcon(rank)}</TableCell>
+              ))}
+              <TableCell onClick={() => toggleSort("Average Rank")}>Average Rank</TableCell>
               <TableCell>Profile</TableCell>
             </TableRow>
           </TableHead>
@@ -173,18 +196,14 @@ const BigBoard = () => {
                 <TableCell><Avatar src={player.photoUrl} alt={player.name} /></TableCell>
                 <TableCell>{player.name}</TableCell>
                 <TableCell>{player.currentTeam}</TableCell>
-                <TableCell>{player["ESPN Rank"]}</TableCell>
                 <TableCell>{player.height}</TableCell>
                 <TableCell>{player["weight (lbs)"]}</TableCell>
-                <TableCell>{player["agility (s)"]}</TableCell>
+                {scoutRanks.map(rank => (
+                  <TableCell key={rank}>{player[rank] || "N/A"}</TableCell>
+                ))}
+                <TableCell>{calculateAverage(player)}</TableCell>
                 <TableCell>
-                  <Button 
-                    variant="contained" 
-                    color="primary" 
-                    onClick={() => navigateToProfile(player)}
-                  >
-                    View Profile
-                  </Button>
+                  <Button variant="contained" onClick={() => navigateToProfile(player)}>View Profile</Button>
                 </TableCell>
               </TableRow>
             ))}
