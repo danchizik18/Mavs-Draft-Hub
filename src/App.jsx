@@ -4,6 +4,7 @@ import BigBoard from './pages/BigBoard';
 import PlayerProfile from './pages/PlayerProfile';
 import WelcomeScreen from './pages/WelcomeScreen';
 import Navbar from './components/NavBar';
+import Chatbot from "./components/Chatbot";
 import './styles/App.css';
 
 function App() {
@@ -18,6 +19,9 @@ function App() {
           <Route path="*" element={<h2>404 - Page Not Found</h2>} />
         </Routes>
       </div>
+      
+      {}
+      <Chatbot />
     </div>
   );
 }
