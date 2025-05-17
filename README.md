@@ -1,6 +1,6 @@
 Mavericks Draft Hub
 
-Welcome to the Mavericks Draft Hub! This web application provides a centralized analysis platform (with player profiles, statistic filets, and an AI chatbot) fir the Dallas Mavericks front office (I'll pretend that they'll draft Flagg because of this). 
+Welcome to the Mavericks Draft Hub! This web application provides a centralized analysis platform (with player profiles, statistic filters, and an AI chatbot) fir the Dallas Mavericks front office (I'll pretend that they'll draft Flagg because of this). 
 
 1. Features
 - Interactive Big Board with real-time sorting and filtering
